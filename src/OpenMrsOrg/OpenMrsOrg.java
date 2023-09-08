@@ -1,9 +1,9 @@
-package OpenMrsCom;
+package OpenMrsOrg;
 
 import Utility.BaseDriver;
 import org.testng.annotations.Test;
 
-public class OpenMrsCom extends BaseDriver {
+public class OpenMrsOrg extends BaseDriver {
 
     @Test
     public void SistemeGirisHatalariniKontrol() {
