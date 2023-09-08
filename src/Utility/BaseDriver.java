@@ -1,9 +1,12 @@
 package Utility;
 
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
@@ -26,20 +29,20 @@ public class BaseDriver {
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20)); // 20 sn mühlet: sayfayı yükleme mühlet
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));  // 20 sn mühlet: elementi bulma mühleti
         wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-        driver.get("https://techno.study/tr");
+        driver.get("https://openmrs.org/");
 
-       // loginTesti();
-    }
-
+//       loginTesti();
+      }
+//
 //    public void loginTesti(){
-//        driver.get("https://opencart.abstracta.us/index.php?route=account/login");
+//        driver.get("https://openmrs.org/");
 //        MyFunc.Bekle(2);
 //
 //        WebElement inputEmail = driver.findElement(By.id("input-email"));
-//        inputEmail.sendKeys("testng1@gmail.com");
+//        inputEmail.sendKeys("admin");
 //
 //        WebElement inputpassword = driver.findElement(By.id("input-password"));
-//        inputpassword.sendKeys("123qweasd");
+//        inputpassword.sendKeys("Admin123");
 //
 //        WebElement loginBtn = driver.findElement(By.xpath("//input[@type='submit']"));
 //        loginBtn.click();
