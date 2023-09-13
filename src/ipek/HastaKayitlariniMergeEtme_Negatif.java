@@ -32,6 +32,7 @@ public class HastaKayitlariniMergeEtme_Negatif extends BaseDriverParameter {
         openMRS2Demo.click();
 
 
+
         WebElement username=driver.findElement(By.id("username"));
         username.sendKeys(userName + Keys.TAB);
         WebElement password=driver.findElement(By.id("password"));
