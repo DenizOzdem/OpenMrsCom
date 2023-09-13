@@ -13,9 +13,9 @@ import org.testng.annotations.Test;
 public class _01_SistemLoginHatali extends BaseDriver {
 
     @Test(dataProvider = "UserData")
-    public void SistemLoginHatali(String isim,String sifre){
+    public void SistemLoginHatali(String isim, String sifre) {
 
-
+        if (isim.equals("ihsan")) {
 
             WebElement demo = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Demo")));
             demo.click();
@@ -28,37 +28,34 @@ public class _01_SistemLoginHatali extends BaseDriver {
             enterMRS.click();
             MyFunc.Bekle(2);
 
+        }
 
-            WebElement id = driver.findElement(By.id("username"));
-            id.clear();
-            id.sendKeys(isim);
-
-
-            WebElement pw = driver.findElement(By.id("password"));
-            pw.clear();
-            pw.sendKeys(sifre);
+        WebElement id = driver.findElement(By.id("username"));
+        id.clear();
+        id.sendKeys(isim);
 
 
-            WebElement login = driver.findElement(By.id("loginButton"));
-            login.click();
+        WebElement pw = driver.findElement(By.id("password"));
+        pw.clear();
+        pw.sendKeys(sifre);
 
 
-            WebElement hatamsj1 = driver.findElement(By.id("sessionLocationError"));
-            System.out.println("hatamsj1 = " + hatamsj1);
-            Assert.assertTrue(hatamsj1.isDisplayed());
+        WebElement login = driver.findElement(By.id("loginButton"));
+        login.click();
 
 
-            driver.get("https://openmrs.org/");
+        WebElement hatamsj1 = driver.findElement(By.id("sessionLocationError"));
+        System.out.println("hatamsj1 = " + hatamsj1);
+        Assert.assertTrue(hatamsj1.isDisplayed());
 
 
-        WebElement location=driver.findElement(By.xpath("//li[@id='Registration Desk']"));
+        WebElement location = driver.findElement(By.xpath("//li[@id='Registration Desk']"));
         location.click();
 
-        WebElement login2=driver.findElement(By.id("loginButton"));
+        WebElement login2 = driver.findElement(By.id("loginButton"));
         login2.click();
 
-        WebElement errormsj=wait.until(ExpectedConditions.
-                visibilityOfElementLocated(By.linkText("Invalid username/password. Please try again.")));
+        WebElement errormsj = driver.findElement(By.xpath("//*[@id='error-message']"));
 
         Assert.assertTrue(errormsj.isDisplayed());
 
@@ -66,8 +63,8 @@ public class _01_SistemLoginHatali extends BaseDriver {
     }
 
     @DataProvider
-    public Object[][] UserData(){
-        Object[][] data= {
+    public Object[][] UserData() {
+        Object[][] data = {
                 {"ihsan", "122334"},
                 {"sokol", "rustem5"},
                 {"zeynep", "zeynep111"},
@@ -78,7 +75,6 @@ public class _01_SistemLoginHatali extends BaseDriver {
         };
         return data;
     }
-
 
 
 }
