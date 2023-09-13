@@ -23,22 +23,16 @@ public class HastaArama_POZITIF extends BaseDriver{
         hastaKayitBul.click();
         MyFunc.Bekle(2);
 
-
-
         //isimden arama
         WebElement hastaAra= driver.findElement(By.xpath("//input[@class='form-control']"));
         hastaAra.sendKeys("Cenk"); //hasta sonradan silinmiş olabilir
         MyFunc.Bekle(3);
         WebElement acilanListe= driver.findElement(By.xpath("//table[@id='patient-search-results-table']"));
-        Assert.assertTrue(acilanListe.getText().contains("Cenk"),"Aranan hasta bulunamadı");
+        Assert.assertTrue(acilanListe.getText().contains("Cenk"),"Aranan hasta ismi bulunamadı");
 
-
-
-
+        hastaAra.clear();
         WebElement bosyereTikla= driver.findElement(bosYereTiklat);
         bosyereTikla.click();
-
-
 
         //soyisimden arama
         for (int i = 0; i < 4; i++) {
@@ -52,14 +46,12 @@ public class HastaArama_POZITIF extends BaseDriver{
             MyFunc.Bekle(1);
             robot.keyRelease(KeyEvent.VK_BACK_SPACE);
         }
+
         hastaAra.sendKeys("Tosun");//hasta sonradan silinmiş olabilir
         MyFunc.Bekle(3);
-        Assert.assertTrue(acilanListe.getText().contains("Tosun"),"Aranan hasta bulunamadı");
+        Assert.assertTrue(acilanListe.getText().contains("Tosun"),"Aranan hasta soyismi bulunamadı");
 
-
-
-
-
+        hastaAra.clear();
         bosyereTikla.click();
         //kimlikten arama
         for (int i = 0; i < 4; i++) {
@@ -73,15 +65,11 @@ public class HastaArama_POZITIF extends BaseDriver{
             MyFunc.Bekle(1);
             robot.keyRelease(KeyEvent.VK_BACK_SPACE);
         }
-        hastaAra.sendKeys("1007WV");//hasta sonradan silinmiş olabilir
+        hastaAra.sendKeys("100LXD");//hasta sonradan silinmiş olabilir
         MyFunc.Bekle(3);
-        Assert.assertTrue(acilanListe.getText().contains("1007WV"),"Aranan hasta bulunamadı");
+        Assert.assertTrue(acilanListe.getText().contains("100LXD"),"Aranan hasta ID bulunamadı");
 
-
-
-
-
-
+        hastaAra.clear();
         bosyereTikla.click();
         //hasta bilgilerini görüntüleme
         for (int i = 0; i < 4; i++) {

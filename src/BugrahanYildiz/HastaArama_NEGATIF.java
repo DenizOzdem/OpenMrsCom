@@ -17,13 +17,13 @@ public class HastaArama_NEGATIF extends BaseDriver {
 
     @Test
     public void HastaAramaNeg() throws AWTException {
+
+        By bosYereTiklat=By.xpath("//div[@class='collapse navbar-collapse']");
         Robot robot=new Robot();
 
         WebElement hastaKayitBul=driver.findElement(By.xpath("//a[@id='coreapps-activeVisitsHomepageLink-coreapps-activeVisitsHomepageLink-extension']"));
         hastaKayitBul.click();
         MyFunc.Bekle(2);
-
-
 
         //isimden arama
         WebElement hastaAra= driver.findElement(By.xpath("//input[@class='form-control']"));
@@ -32,13 +32,9 @@ public class HastaArama_NEGATIF extends BaseDriver {
         WebElement acilanListe= driver.findElement(By.xpath("//table[@id='patient-search-results-table']"));
         Assert.assertTrue(acilanListe.getText().contains("No matching records found"),"GetText bulunamadı.");
 
-
-
-
+        hastaAra.clear();
         WebElement bosyereTikla= driver.findElement(bosYereTiklat);
         bosyereTikla.click();
-
-
 
         //soyisimden arama
         for (int i = 0; i < 4; i++) {
@@ -47,18 +43,10 @@ public class HastaArama_NEGATIF extends BaseDriver {
             robot.keyRelease(KeyEvent.VK_TAB);
         }
 
-        for (int i = 0; i < 4; i++) {
-            robot.keyPress(KeyEvent.VK_BACK_SPACE);
-            MyFunc.Bekle(1);
-            robot.keyRelease(KeyEvent.VK_BACK_SPACE);
-        }
+        hastaAra.clear();
         hastaAra.sendKeys("Lima");//hasta sonradan eklenmiş olabilir
         MyFunc.Bekle(3);
         Assert.assertTrue(acilanListe.getText().contains("No matching records found"),"GetText bulunamadı.");
-
-
-
-
 
         bosyereTikla.click();
         //kimlikten arama
@@ -68,11 +56,7 @@ public class HastaArama_NEGATIF extends BaseDriver {
             robot.keyRelease(KeyEvent.VK_TAB);
         }
 
-        for (int i = 0; i < 4; i++) {
-            robot.keyPress(KeyEvent.VK_BACK_SPACE);
-            MyFunc.Bekle(1);
-            robot.keyRelease(KeyEvent.VK_BACK_SPACE);
-        }
+        hastaAra.clear();
         hastaAra.sendKeys("15781AL");//hasta sonradan eklenmiş olabilir
         MyFunc.Bekle(3);
         Assert.assertTrue(acilanListe.getText().contains("No matching records found"),"GetText bulunamadı.");

@@ -55,39 +55,39 @@ public class ahmet extends BaseDriver {
     }
 
     @Test()
-    public void RegisterAhmet(){
-        driver.get("https://openmrs.org/");
-        MyFunc.Bekle(2);
+    public void HastaKaydi(){
+//        driver.get("https://demo.openmrs.org/");
+//        MyFunc.Bekle(2);
 
-        WebElement demo= driver.findElement(By.xpath("//a[@class='zak-button']"));
-        demo.click();
-        MyFunc.Bekle(1);
-
-        WebElement explore= driver.findElement(By.cssSelector("div[class='elementor-button-wrapper']>:nth-child(1)"));
-        Actions actions=new Actions(driver);
-        actions.scrollToElement(explore);
-        explore.click();
-        MyFunc.Bekle(1);
-        WebElement openMrs2= driver.findElement(By.xpath("//span[text()='Enter the OpenMRS 2 Demo']"));
-        openMrs2.click();
-        MyFunc.Bekle(2);
-        WebElement username = driver.findElement(By.xpath("//input[@id='username']"));
-        username.sendKeys("admin");
-        MyFunc.Bekle(2);
-        WebElement password= driver.findElement(By.xpath("//input[@id='password']"));
-        password.sendKeys("Admin123");
-        MyFunc.Bekle(2);
-        List<WebElement> location=driver.findElements(By.xpath("//ul[@id='sessionLocation']/li")); //başlıklar locationun li olan çocukları
-        MyFunc.Bekle(1);
-
-        int randomSecim= MyFunc.randomGenerator(location.size()); // random bir sayı üretildi
-        String locationText=location.get(randomSecim).getText(); //random location adı alındı
-        System.out.println("locationText = " + locationText); // kontrol için yazdım
-        location.get(randomSecim).click();
-        MyFunc.Bekle(2);
-        WebElement login= driver.findElement(By.xpath("//input[@id='loginButton']"));
-        login.click();
-        MyFunc.Bekle(1);
+//        WebElement demo= driver.findElement(By.xpath("//a[@class='zak-button']"));
+//        demo.click();
+//        MyFunc.Bekle(1);
+//
+//        WebElement explore= driver.findElement(By.cssSelector("div[class='elementor-button-wrapper']>:nth-child(1)"));
+//        Actions actions=new Actions(driver);
+//        actions.scrollToElement(explore);
+//        explore.click();
+//        MyFunc.Bekle(1);
+//        WebElement openMrs2= driver.findElement(By.xpath("//span[text()='Enter the OpenMRS 2 Demo']"));
+//        openMrs2.click();
+//        MyFunc.Bekle(2);
+//        WebElement username = driver.findElement(By.xpath("//input[@id='username']"));
+//        username.sendKeys("admin");
+//        MyFunc.Bekle(2);
+//        WebElement password= driver.findElement(By.xpath("//input[@id='password']"));
+//        password.sendKeys("Admin123");
+//        MyFunc.Bekle(2);
+//        List<WebElement> location=driver.findElements(By.xpath("//ul[@id='sessionLocation']/li")); //başlıklar locationun li olan çocukları
+//        MyFunc.Bekle(1);
+//
+//        int randomSecim= MyFunc.randomGenerator(location.size()); // random bir sayı üretildi
+//        String locationText=location.get(randomSecim).getText(); //random location adı alındı
+//        System.out.println("locationText = " + locationText); // kontrol için yazdım
+//        location.get(randomSecim).click();
+//        MyFunc.Bekle(2);
+//        WebElement login= driver.findElement(By.xpath("//input[@id='loginButton']"));
+//        login.click();
+//        MyFunc.Bekle(1);
         WebElement register= driver.findElement(By.xpath("//i[@class='icon-user']"));
         register.click();
         MyFunc.Bekle(1);

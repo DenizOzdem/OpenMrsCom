@@ -12,7 +12,6 @@ public class Login_Logout extends BaseDriver {
     @Test
     public void Login() {
 
-
         WebElement demoButton = driver.findElement(By.linkText("Demo"));
         demoButton.click();
         MyFunc.Bekle(2);

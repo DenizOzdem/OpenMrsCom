@@ -13,14 +13,12 @@ public class _02_HastaRandevuYanlisSaatDilimi extends BaseDriver {
     @Test
     public void RandevuYanlisSaatDilimi(){
 
-
-
+        MyFunc.Bekle(3);
         WebElement demo=wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Demo")));
         demo.click();
 
         WebElement explore=driver.findElement(By.xpath("(//div[@class='elementor-button-wrapper']/a)[2]"));
         explore.click();
-
 
         MyFunc.Bekle(2);
         WebElement enterMRS=wait.until(ExpectedConditions.
@@ -28,10 +26,8 @@ public class _02_HastaRandevuYanlisSaatDilimi extends BaseDriver {
         enterMRS.click();
         MyFunc.Bekle(2);
 
-
         WebElement id=driver.findElement(By.id("username"));
         id.sendKeys("admin");
-
 
         WebElement pw=driver.findElement(By.id("password"));
         pw.sendKeys("Admin123");
@@ -55,16 +51,9 @@ public class _02_HastaRandevuYanlisSaatDilimi extends BaseDriver {
                 elementToBeClickable(By.xpath("//tbody[@role='alert']/tr")));
         tbody.click();
 
-
-
-
         WebElement hataText=driver.findElement(By.xpath("//div[@id='time-zone-warning']//p"));
 
         Assert.assertTrue(hataText.isDisplayed());
-
-
-
-
 
     }
 

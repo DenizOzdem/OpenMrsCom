@@ -1,5 +1,7 @@
 package ipekk;
 
+import Utility.BaseDriver;
+import Utility.MyFunc;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -7,7 +9,7 @@ import org.openqa.selenium.WebElement;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-public class HastaKayitlariniMergeEtme_pztf {
+public class HastaKayitlariniMergeEtme_pztf extends BaseDriver {
     //100HRU
     //100J27
     @Test
@@ -26,13 +28,10 @@ public class HastaKayitlariniMergeEtme_pztf {
         WebElement openMRS2Demo=driver.findElement(By.xpath("//span[@class='elementor-button-text' and text()='Enter the OpenMRS 2 Demo']"));
         openMRS2Demo.click();
 
-
-
         WebElement username=driver.findElement(By.id("username"));
         username.sendKeys(userName + Keys.TAB);
         WebElement password=driver.findElement(By.id("password"));
         password.sendKeys(passWord);
-
 
         WebElement registrationDesk=driver.findElement(By.xpath("//li[text()='Registration Desk']"));
         registrationDesk.click();

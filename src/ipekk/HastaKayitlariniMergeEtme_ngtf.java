@@ -1,5 +1,7 @@
 package ipekk;
 
+import Utility.BaseDriver;
+import Utility.MyFunc;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -8,7 +10,7 @@ import org.testng.Assert;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-public class HastaKayitlariniMergeEtme_ngtf {
+public class HastaKayitlariniMergeEtme_ngtf extends BaseDriver {
 
     @Test
     @Parameters({"parametre1","parametre2"})
@@ -25,8 +27,6 @@ public class HastaKayitlariniMergeEtme_ngtf {
         MyFunc.Bekle(2);
         WebElement openMRS2Demo=driver.findElement(By.xpath("//span[@class='elementor-button-text' and text()='Enter the OpenMRS 2 Demo']"));
         openMRS2Demo.click();
-
-
 
         WebElement username=driver.findElement(By.id("username"));
         username.sendKeys(userName + Keys.TAB);

@@ -20,8 +20,8 @@ public class BaseDriver {
     public static WebDriverWait wait;
 
     @BeforeClass
-    public void baslangicIslemleri(){
-        Logger logger= Logger.getLogger(""); // output yapılan logları al.
+    public void baslangicIslemleri() {
+        Logger logger = Logger.getLogger(""); // output yapılan logları al.
         logger.setLevel(Level.SEVERE); // sadece ERROR ları göster
 
         driver = new ChromeDriver(); // jenkins deyken : sen head olmadan yani hafızada çalış
@@ -29,29 +29,31 @@ public class BaseDriver {
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20)); // 20 sn mühlet: sayfayı yükleme mühlet
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));  // 20 sn mühlet: elementi bulma mühleti
         wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-        driver.get("https://demo.openmrs.org/");
+        driver.get("https://openmrs.org/");
 
-//       loginTesti();
-      }
-//
-//    public void loginTesti(){
-//        driver.get("https://openmrs.org/");
-//        MyFunc.Bekle(2);
-//
-//        WebElement inputEmail = driver.findElement(By.id("input-email"));
-//        inputEmail.sendKeys("admin");
-//
-//        WebElement inputpassword = driver.findElement(By.id("input-password"));
-//        inputpassword.sendKeys("Admin123");
-//
-//        WebElement loginBtn = driver.findElement(By.xpath("//input[@type='submit']"));
-//        loginBtn.click();
-//
-//        Assert.assertTrue(driver.getTitle().equals("My Account"));
-//    }
+//        loginTesti();
+    }
+
+    public void loginTesti() {
+        driver.get("https://openmrs.org/");
+        MyFunc.Bekle(2);
+
+        WebElement username = driver.findElement(By.id("username"));
+        username.sendKeys("admin");
+
+        WebElement password = driver.findElement(By.id("password"));
+        password.sendKeys("Admin123");
+
+        WebElement locationSelect = driver.findElement(By.id("Registration Desk"));
+        locationSelect.click();
+
+        WebElement loginBtn = driver.findElement(By.id("loginButton"));
+        loginBtn.click();
+
+    }
 
     @AfterClass
-    public void bitisIslemleri(){ // tearDown
+    public void bitisIslemleri() { // tearDown
         MyFunc.Bekle(1);
         driver.quit();
     }
