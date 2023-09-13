@@ -9,7 +9,7 @@ import org.openqa.selenium.WebElement;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-public class HastaKayitlariniMergeEtme_P extends BaseDriverParameter {
+public class HastaKayitlariniMergeEtme_P {
     //100HRU
     //100J27
     @Test

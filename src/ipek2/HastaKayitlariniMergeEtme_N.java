@@ -10,7 +10,7 @@ import org.testng.Assert;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-public class HastaKayitlariniMergeEtme_N extends BaseDriverParameter {
+public class HastaKayitlariniMergeEtme_N {
 
     @Test
     @Parameters({"parametre1","parametre2"})
