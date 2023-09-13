@@ -1,0 +1,19 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="mySuit">
+
+    <test name="myTest1">
+        <parameter name="browserTipi" value="chrome"></parameter>
+        <parameter name="parametre1" value="admin"></parameter>
+        <parameter name="parametre2" value="Admin123"></parameter>
+
+        <classes>
+            <class name="ipek.HastaKayitlariniMergeEtme_Pozitif"> </class>
+            <class name="ipek.HastaKayitlariniMergeEtme_Negatif"> </class>
+        </classes>
+    </test>
+
+
+
+</suite>
+
