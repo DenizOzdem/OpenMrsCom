@@ -31,6 +31,7 @@ public class HastaKayitlariniMergeEtme_Negatif extends BaseDriverParameter {
         WebElement openMRS2Demo=driver.findElement(By.xpath("//span[@class='elementor-button-text' and text()='Enter the OpenMRS 2 Demo']"));
         openMRS2Demo.click();
 
+
         WebElement username=driver.findElement(By.id("username"));
         username.sendKeys(userName + Keys.TAB);
         WebElement password=driver.findElement(By.id("password"));

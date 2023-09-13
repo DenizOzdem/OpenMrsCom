@@ -3,7 +3,7 @@
 <suite name="mySuit">
 
     <test name="myTest1">
-        <parameter name="browserTipi" value="crome"></parameter>
+        <parameter name="browserTipi" value="chrome"></parameter>
         <parameter name="parametre1" value="admin"></parameter>
         <parameter name="parametre2" value="Admin123"></parameter>
 
@@ -12,6 +12,7 @@
             <class name="ipek.HastaKayitlariniMergeEtme_Negatif"> </class>
         </classes>
     </test>
+
 
 </suite>
 
