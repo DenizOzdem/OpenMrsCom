@@ -37,6 +37,7 @@ public class HastaKayitlariniMergeEtme_Pozitif extends BaseDriverParameter {
         WebElement password=driver.findElement(By.id("password"));
         password.sendKeys(passWord);
 
+
         WebElement registrationDesk=driver.findElement(By.xpath("//li[text()='Registration Desk']"));
         registrationDesk.click();
 
