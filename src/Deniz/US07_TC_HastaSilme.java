@@ -101,6 +101,7 @@ public class US07_TC_HastaSilme {
         WebElement loggedIn = driver.findElement(By.xpath("//h4[contains(text(),'Logged')]"));
         Assert.assertTrue(loggedIn.getText().contains("Logged in"), "Login sayfası açılmadı.");
 
+
         MyFunc.Bekle(1);
         WebElement findPatientRecord = driver.findElement(By.id("coreapps-activeVisitsHomepageLink-coreapps-activeVisitsHomepageLink-extension"));
         findPatientRecord.click();
