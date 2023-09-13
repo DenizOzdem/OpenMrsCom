@@ -57,6 +57,7 @@ public class _02_HastaRandevuYanlisSaatDilimi extends BaseDriver {
 
 
 
+
         WebElement hataText=driver.findElement(By.xpath("//div[@id='time-zone-warning']//p"));
 
         Assert.assertTrue(hataText.isDisplayed());
