@@ -26,28 +26,12 @@ public class OpenMrsOrg {
     public static WebDriver driver;
     public static WebDriverWait wait;
 
-//    @BeforeClass
-//    public void baslangicIslemleri() {
-//        Logger logger = Logger.getLogger("");
-//        logger.setLevel(Level.SEVERE);
-//
-//        driver = new ChromeDriver();
-//        driver.manage().window().maximize();
-//        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
-//        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
-//        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-//        driver.get("https://openmrs.org/");
-//    }
-
-    @AfterClass
-    public void bitisIslemleri() {
-        MyFunc.Bekle(1);
-        driver.quit();
-    }
-
-    @Test(dataProvider = "UserData")
+    @Test(priority = 1, dataProvider = "UserData", groups = {"Smoke Test"})
     public void SistemLoginHatali(String isim, String sifre) {
 
+        driver.get("https://openmrs.org/");
+
+        MyFunc.Bekle(3);
         if (isim.equals("ihsan")) {
 
             WebElement demo = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Demo")));
@@ -103,16 +87,16 @@ public class OpenMrsOrg {
     }
 
 
-    @Test (groups = {"Smoke Test"})
+    @Test (priority = 2, groups = {"Smoke Test"})
     public void Login() {
 
-        Logger logger = Logger.getLogger("");
-        logger.setLevel(Level.SEVERE);
+        Logger logger = Logger.getLogger(""); // output yapılan logları al.
+        logger.setLevel(Level.SEVERE); // sadece ERROR ları göster
 
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+        driver = new ChromeDriver(); // jenkins deyken : sen head olmadan yani hafızada çalış
+        driver.manage().window().maximize(); // Ekranı max yapıyor.
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20)); // 20 sn mühlet: sayfayı yükleme mühlet
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));  // 20 sn mühlet: elementi bulma mühleti
         wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         driver.get("https://openmrs.org/");
 
@@ -147,7 +131,7 @@ public class OpenMrsOrg {
     }
 
 
-    @Test(dependsOnMethods = {"WebAppLogin"})
+    @Test(priority = 7, groups = {"Smoke Test"})
     public void Logout() {
 
         WebElement logOutButton = driver.findElement(By.linkText("Logout"));
@@ -157,20 +141,20 @@ public class OpenMrsOrg {
     }
 
 
-    @Test
+    @Test (priority = 3, groups = {"Smoke Test"})
     public void HastaKaydi() {
 
         WebElement register= driver.findElement(By.xpath("//i[@class='icon-user']"));
         register.click();
         MyFunc.Bekle(1);
         WebElement name= driver.findElement(By.xpath("//input[@name='givenName']"));
-        name.sendKeys("ayşe");
+        name.sendKeys("Mehmet");
         MyFunc.Bekle(1);
-        WebElement middle= driver.findElement(By.xpath("//input[@name='middleName']"));
-        middle.sendKeys("fatma");
-        MyFunc.Bekle(1);
+//        WebElement middle= driver.findElement(By.xpath("//input[@name='middleName']"));
+//        middle.sendKeys("");
+//        MyFunc.Bekle(1);
         WebElement famillyName= driver.findElement(By.xpath("//input[@name='familyName']"));
-        famillyName.sendKeys("hayriye");
+        famillyName.sendKeys("Turk");
         MyFunc.Bekle(1);
         WebElement ahead1= driver.findElement(By.xpath("//icon[@class='fas fa-chevron-right']"));
         ahead1.click();
@@ -223,7 +207,7 @@ public class OpenMrsOrg {
     }
 
 
-    @Test
+    @Test(priority = 1, groups = {"Regression"})
     public void MyAccount() {
 
         WebElement profilIconu= driver.findElement(By.xpath("//li[@class='nav-item identifier']"));
@@ -249,7 +233,7 @@ public class OpenMrsOrg {
     }
 
 
-    @Test
+    @Test (priority = 2, groups = {"Regression"})
     public void HastaAramaP() throws AWTException {
 
         By bosYereTiklat=By.xpath("//div[@class='collapse navbar-collapse']");
@@ -312,7 +296,7 @@ public class OpenMrsOrg {
         Assert.assertTrue(hastaBilgiListesi.getText().contains("DIAGNOSES"),"Hasta Bilgisi Görüntülenemedi.");
     }
 
-    @Test
+    @Test (priority = 3, groups = {"Regression"})
     public void HastaAramaN() throws AWTException {
 
         By bosYereTiklat=By.xpath("//div[@class='collapse navbar-collapse']");
@@ -361,10 +345,10 @@ public class OpenMrsOrg {
     }
 
 
-    @Test (dependsOnMethods = {"Login"}, groups = {"Smoke Test"})
+    @Test (priority = 4, groups = {"Smoke Test"})
     public void HastaSilmeIsimle() {
 
-        MyFunc.Bekle(2);
+        MyFunc.Bekle(4);
         WebElement anasayfa=driver.findElement(By.xpath("//i[@class='icon-home small']"));
         anasayfa.click();
 
@@ -386,10 +370,10 @@ public class OpenMrsOrg {
     }
 
 
-    @Test (dependsOnMethods = {"Login"}, groups = {"Smoke Test"})
+    @Test (priority = 5, groups = {"Smoke Test"})
     public void HastaSilmeId() {
 
-        MyFunc.Bekle(2);
+        MyFunc.Bekle(4);
         WebElement anasayfa=driver.findElement(By.xpath("//i[@class='icon-home small']"));
         anasayfa.click();
 
@@ -412,11 +396,11 @@ public class OpenMrsOrg {
     }
 
 
-    @Test (dependsOnMethods = {"Login"}, groups = {"Smoke Test"}, dataProvider = "hastaData")
+    @Test (priority = 6, groups = {"Smoke Test"}, dataProvider = "hastaData")
     public void HastaSilme(String isim,String yes) {
 
-//        WebElement anasayfa=driver.findElement(By.xpath("//i[@class='icon-home small']"));
-//        anasayfa.click();
+        WebElement anasayfa=driver.findElement(By.xpath("//i[@class='icon-home small']"));
+        anasayfa.click();
 
         WebElement loggedIn = driver.findElement(By.xpath("//h4[contains(text(),'Logged')]"));
         Assert.assertTrue(loggedIn.getText().contains("Logged in"), "Login sayfası açılmadı.");
@@ -465,7 +449,7 @@ public class OpenMrsOrg {
     }
 
 
-    @Test
+    @Test (priority = 4, groups = {"Regression"})
     public void HastaListeleme() {
 
         JavascriptExecutor js=(JavascriptExecutor)driver;
@@ -507,7 +491,7 @@ public class OpenMrsOrg {
 
     }
 
-    @Test
+    @Test (priority = 5, groups = {"Regression"})
     public void HastaKayitlariniBirlestirmeP() {
 
         JavascriptExecutor js=(JavascriptExecutor) driver;
@@ -570,7 +554,7 @@ public class OpenMrsOrg {
 
     }
 
-    @Test
+    @Test (priority = 6, groups = {"Regression"})
     public void HastaKayitlariniBirlestirmeN() {
 
         JavascriptExecutor js=(JavascriptExecutor) driver;
@@ -613,7 +597,7 @@ public class OpenMrsOrg {
     }
 
 
-    @Test
+    @Test (priority = 7, groups = {"Regression"})
     public void RandevuYanlisSaatDilimi() {
 
         MyFunc.Bekle(3);
