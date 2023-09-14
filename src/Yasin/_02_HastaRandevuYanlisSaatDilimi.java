@@ -6,12 +6,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class _02_HastaRandevuYanlisSaatDilimi extends BaseDriver {
 
-    @Test
-    public void RandevuYanlisSaatDilimi(){
+    @Test(dataProvider = "getData")
+    public void RandevuYanlisSaatDilimi(String isim,String sifre,String kod){
 
 
 
@@ -30,11 +31,11 @@ public class _02_HastaRandevuYanlisSaatDilimi extends BaseDriver {
 
 
         WebElement id=driver.findElement(By.id("username"));
-        id.sendKeys("admin");
+        id.sendKeys(isim);
 
 
         WebElement pw=driver.findElement(By.id("password"));
-        pw.sendKeys("Admin123");
+        pw.sendKeys(sifre);
 
         WebElement location=driver.findElement(By.id("Registration Desk"));
         location.click();
@@ -49,7 +50,7 @@ public class _02_HastaRandevuYanlisSaatDilimi extends BaseDriver {
         manage.click();
 
         WebElement hastaid=driver.findElement(By.xpath("//input[@id='patient-search']"));
-        hastaid.sendKeys("100JGA");
+        hastaid.sendKeys(kod);
 
         WebElement tbody=wait.until(ExpectedConditions.
                 elementToBeClickable(By.xpath("//tbody[@role='alert']/tr")));
@@ -58,14 +59,18 @@ public class _02_HastaRandevuYanlisSaatDilimi extends BaseDriver {
 
 
 
-        WebElement hataText=driver.findElement(By.xpath("//div[@id='time-zone-warning']//p"));
+        WebElement hataText=wait.until(ExpectedConditions.
+                visibilityOfElementLocated(By.xpath("//div[@id='time-zone-warning']//p")));
 
         Assert.assertTrue(hataText.isDisplayed());
 
 
-
-
-
+    }
+    @DataProvider
+    Object[][] getData()
+    {
+        Object[][] data={{"admin","Admin123","100JGA"}};
+        return data;
     }
 
 
