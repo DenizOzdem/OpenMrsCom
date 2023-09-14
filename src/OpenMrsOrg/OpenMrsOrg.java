@@ -2,22 +2,48 @@ package OpenMrsOrg;
 
 import Utility.BaseDriver;
 import Utility.MyFunc;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.time.Duration;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class OpenMrsOrg extends BaseDriver {
+public class OpenMrsOrg {
+
+    public static WebDriver driver;
+    public static WebDriverWait wait;
+
+//    @BeforeClass
+//    public void baslangicIslemleri() {
+//        Logger logger = Logger.getLogger("");
+//        logger.setLevel(Level.SEVERE);
+//
+//        driver = new ChromeDriver();
+//        driver.manage().window().maximize();
+//        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+//        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+//        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+//        driver.get("https://openmrs.org/");
+//    }
+
+    @AfterClass
+    public void bitisIslemleri() {
+        MyFunc.Bekle(1);
+        driver.quit();
+    }
 
     @Test(dataProvider = "UserData")
     public void SistemLoginHatali(String isim, String sifre) {
@@ -40,21 +66,16 @@ public class OpenMrsOrg extends BaseDriver {
         WebElement id = driver.findElement(By.id("username"));
         id.clear();
         id.sendKeys(isim);
-
-
         WebElement pw = driver.findElement(By.id("password"));
         pw.clear();
         pw.sendKeys(sifre);
 
-
         WebElement login = driver.findElement(By.id("loginButton"));
         login.click();
-
 
         WebElement hatamsj1 = driver.findElement(By.id("sessionLocationError"));
         System.out.println("hatamsj1 = " + hatamsj1);
         Assert.assertTrue(hatamsj1.isDisplayed());
-
 
         WebElement location = driver.findElement(By.xpath("//li[@id='Registration Desk']"));
         location.click();
@@ -65,7 +86,6 @@ public class OpenMrsOrg extends BaseDriver {
         WebElement errormsj = driver.findElement(By.xpath("//*[@id='error-message']"));
 
         Assert.assertTrue(errormsj.isDisplayed());
-
 
     }
 
@@ -78,14 +98,23 @@ public class OpenMrsOrg extends BaseDriver {
                 {"serkan", "serkan500"},
                 {"yasin", "kskizmir"},
                 {"batuhan", "izmir35"}
-
         };
         return data;
     }
 
 
-    @Test
+    @Test (groups = {"Smoke Test"})
     public void Login() {
+
+        Logger logger = Logger.getLogger("");
+        logger.setLevel(Level.SEVERE);
+
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        driver.get("https://openmrs.org/");
 
         WebElement demoButton = driver.findElement(By.linkText("Demo"));
         demoButton.click();
@@ -332,9 +361,10 @@ public class OpenMrsOrg extends BaseDriver {
     }
 
 
-    @Test
+    @Test (dependsOnMethods = {"Login"}, groups = {"Smoke Test"})
     public void HastaSilmeIsimle() {
 
+        MyFunc.Bekle(2);
         WebElement anasayfa=driver.findElement(By.xpath("//i[@class='icon-home small']"));
         anasayfa.click();
 
@@ -356,9 +386,10 @@ public class OpenMrsOrg extends BaseDriver {
     }
 
 
-    @Test
+    @Test (dependsOnMethods = {"Login"}, groups = {"Smoke Test"})
     public void HastaSilmeId() {
 
+        MyFunc.Bekle(2);
         WebElement anasayfa=driver.findElement(By.xpath("//i[@class='icon-home small']"));
         anasayfa.click();
 
@@ -381,9 +412,11 @@ public class OpenMrsOrg extends BaseDriver {
     }
 
 
-    @Test
+    @Test (dependsOnMethods = {"Login"}, groups = {"Smoke Test"}, dataProvider = "hastaData")
     public void HastaSilme(String isim,String yes) {
 
+//        WebElement anasayfa=driver.findElement(By.xpath("//i[@class='icon-home small']"));
+//        anasayfa.click();
 
         WebElement loggedIn = driver.findElement(By.xpath("//h4[contains(text(),'Logged')]"));
         Assert.assertTrue(loggedIn.getText().contains("Logged in"), "Login sayfası açılmadı.");
@@ -490,9 +523,9 @@ public class OpenMrsOrg extends BaseDriver {
         openMRS2Demo.click();
 
         WebElement username=driver.findElement(By.id("username"));
-        username.sendKeys(userName + Keys.TAB);
+        username.sendKeys("admin" + Keys.TAB);
         WebElement password=driver.findElement(By.id("password"));
-        password.sendKeys(passWord);
+        password.sendKeys("Admin123");
 
         WebElement registrationDesk=driver.findElement(By.xpath("//li[text()='Registration Desk']"));
         registrationDesk.click();
@@ -511,12 +544,11 @@ public class OpenMrsOrg extends BaseDriver {
         WebElement id2=driver.findElement(By.xpath("//*[@id=\"patient2-text\"]"));
         id2.sendKeys("100J27" + Keys.ENTER);
 
-        /*WebElement continueButton=driver.findElement(By.xpath("//*[@id=\"confirm-button\"]"));
+        WebElement continueButton=driver.findElement(By.xpath("//*[@id=\"confirm-button\"]"));
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id=\"confirm-button\"]")));
         continueButton.click();
 
         WebElement uyari=driver.findElement(By.xpath("//*[@id=\"content\"]/form/div[3]/h1"));
-        System.out.println(uyari.getText());
         Assert.assertTrue(uyari.getText().equals("Merging cannot be undone!\nPlease check records before continuing."));
 
         WebElement hasta1=driver.findElement(By.xpath("//*[@id=\"second-patient\"]/div[2]/div[1]"));
@@ -534,7 +566,7 @@ public class OpenMrsOrg extends BaseDriver {
             }
             else
                 System.out.println("id ler eşleşmedi");
-        }*/
+        }
 
     }
 
@@ -554,9 +586,9 @@ public class OpenMrsOrg extends BaseDriver {
         openMRS2Demo.click();
 
         WebElement username=driver.findElement(By.id("username"));
-        username.sendKeys(userName + Keys.TAB);
+        username.sendKeys("admin" + Keys.TAB);
         WebElement password=driver.findElement(By.id("password"));
-        password.sendKeys(passWord);
+        password.sendKeys("Admin123");
 
         WebElement registrationDesk=driver.findElement(By.xpath("//li[text()='Registration Desk']"));
         registrationDesk.click();
