@@ -7,11 +7,23 @@
 
         <groups>
             <run>
-                <include name="Smoke Test"></include>
+                <include name="Regression"></include>
             </run>
         </groups>
 
+        <classes>
+            <class name="OpenMrsOrg.OpenMrsOrg"></class>
+        </classes>
 
+    </test>
+
+    <test name="myTest2">
+
+        <groups>
+            <run>
+                <include name="Smoke Test"></include>
+            </run>
+        </groups>
 
         <classes>
             <class name="OpenMrsOrg.OpenMrsOrg">
@@ -19,5 +31,4 @@
         </classes>
 
     </test>
-
 </suite>

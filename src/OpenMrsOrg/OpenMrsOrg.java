@@ -1,6 +1,5 @@
 package OpenMrsOrg;
 
-import Utility.BaseDriver;
 import Utility.MyFunc;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -25,14 +24,34 @@ public class OpenMrsOrg {
 
     public static WebDriver driver;
     public static WebDriverWait wait;
+    String s1;
+    String s2;
 
-    @Test(priority = 1, dataProvider = "UserData", groups = {"Smoke Test"})
+    @BeforeClass(groups = {"Smoke Test","Regression"})
+    public void baslangicIslemleri() {
+        Logger logger = Logger.getLogger("");
+        logger.setLevel(Level.SEVERE);
+
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        driver.get("https://openmrs.org/");
+    }
+
+    @AfterClass(groups = {"Smoke Test","Regression"})
+    public void bitisIslemleri() {
+        MyFunc.Bekle(1);
+        driver.quit();
+    }
+
+    @Test(dataProvider = "UserData",priority =1,groups ={"Smoke Test"})
     public void SistemLoginHatali(String isim, String sifre) {
 
-        driver.get("https://openmrs.org/");
-
-        MyFunc.Bekle(3);
+        MyFunc.Bekle(5);
         if (isim.equals("ihsan")) {
+
 
             WebElement demo = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Demo")));
             demo.click();
@@ -87,17 +106,9 @@ public class OpenMrsOrg {
     }
 
 
-    @Test (priority = 2, groups = {"Smoke Test"})
+    @Test (groups = {"Smoke Test"},priority =2)
     public void Login() {
 
-        Logger logger = Logger.getLogger(""); // output yapılan logları al.
-        logger.setLevel(Level.SEVERE); // sadece ERROR ları göster
-
-        driver = new ChromeDriver(); // jenkins deyken : sen head olmadan yani hafızada çalış
-        driver.manage().window().maximize(); // Ekranı max yapıyor.
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20)); // 20 sn mühlet: sayfayı yükleme mühlet
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));  // 20 sn mühlet: elementi bulma mühleti
-        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         driver.get("https://openmrs.org/");
 
         WebElement demoButton = driver.findElement(By.linkText("Demo"));
@@ -131,17 +142,9 @@ public class OpenMrsOrg {
     }
 
 
-    @Test(priority = 7, groups = {"Smoke Test"})
-    public void Logout() {
-
-        WebElement logOutButton = driver.findElement(By.linkText("Logout"));
-        logOutButton.click();
-        MyFunc.Bekle(2);
-
-    }
 
 
-    @Test (priority = 3, groups = {"Smoke Test"})
+    @Test(priority = 3,groups = {"Smoke Test"})
     public void HastaKaydi() {
 
         WebElement register= driver.findElement(By.xpath("//i[@class='icon-user']"));
@@ -150,9 +153,6 @@ public class OpenMrsOrg {
         WebElement name= driver.findElement(By.xpath("//input[@name='givenName']"));
         name.sendKeys("Mehmet");
         MyFunc.Bekle(1);
-//        WebElement middle= driver.findElement(By.xpath("//input[@name='middleName']"));
-//        middle.sendKeys("");
-//        MyFunc.Bekle(1);
         WebElement famillyName= driver.findElement(By.xpath("//input[@name='familyName']"));
         famillyName.sendKeys("Turk");
         MyFunc.Bekle(1);
@@ -196,45 +196,125 @@ public class OpenMrsOrg {
         ahead5.click();
         WebElement ahead6= driver.findElement(By.xpath("//button[@id='next-button']/icon"));
         ahead6.click();
-        MyFunc.Bekle(1);
-        WebElement confirm=driver.findElement(By.xpath("//input[@id='submit']"));
+        MyFunc.Bekle(2);
+        WebElement confirm=driver.findElement(By.id("submit"));
         confirm.click();
+
         WebElement patientName=driver.findElement(By.xpath("//h1[@class='mt-0 mb-2 name']/span"));
         Assert.assertTrue(patientName.isDisplayed());
         WebElement ID=driver.findElement(By.cssSelector("div[class='float-sm-right']>:nth-child(2)"));
         Assert.assertTrue(ID.isDisplayed());
 
+        s1 = "100";
+        s2= "200";
+
     }
 
+    @Test (priority = 4,groups = {"Smoke Test"}, dataProvider = "hastaData")
+    public void HastaSilme(String isim,String yes) {
 
-    @Test(priority = 1, groups = {"Regression"})
-    public void MyAccount() {
+        WebElement anasayfa=driver.findElement(By.xpath("//i[@class='icon-home small']"));
+        anasayfa.click();
 
-        WebElement profilIconu= driver.findElement(By.xpath("//li[@class='nav-item identifier']"));
-        Actions aksiyonDriver=new Actions(driver);
+        WebElement loggedIn = driver.findElement(By.xpath("//h4[contains(text(),'Logged')]"));
+        Assert.assertTrue(loggedIn.getText().contains("Logged in"), "Login sayfası açılmadı.");
+
+        MyFunc.Bekle(1);
+        WebElement findPatientRecord = driver.findElement(By.id("coreapps-activeVisitsHomepageLink-coreapps-activeVisitsHomepageLink-extension"));
+        findPatientRecord.click();
+
+        MyFunc.Bekle(1);
+        WebElement searchPatient = driver.findElement(By.xpath("//input[@class='form-control']"));
+        searchPatient.sendKeys(isim);
+
+        MyFunc.Bekle(1);
+        WebElement patient = driver.findElement(By.xpath("//*[@id=\"patient-search-results-table\"]/tbody/tr[1]/td[1]"));
+        patient.click();
+
+        MyFunc.Bekle(1);
+        WebElement deleteBtn = driver.findElement(By.xpath("//ul[@class='float-left']/li[8]"));
+        deleteBtn.click();
+
+        MyFunc.Bekle(1);
+        WebElement delete = driver.findElement(By.id("delete-reason"));
+        delete.sendKeys(yes);
+
+        MyFunc.Bekle(1);
+        WebElement confirmBtn = driver.findElement(By.xpath("//div[@id='delete-patient-creation-dialog']//*[text()='Confirm']"));
+        confirmBtn.click();
+
+        MyFunc.Bekle(5);
+        WebElement searchPatient2 = driver.findElement(By.xpath("//input[@class='form-control']"));
+        searchPatient2.sendKeys(isim);
+
+        MyFunc.Bekle(1);
+        WebElement noRecord = driver.findElement(By.xpath("//td[@class='dataTables_empty']"));
+        Assert.assertTrue(noRecord.getText().contains("No matching records found"), "Hasta listede var.");
+
+    }
+
+    @DataProvider
+    Object[][] hastaData(){
+        Object[][] data={{"Mehmet Turk","yes"}};
+        return data;
+    }
+
+    @Test (priority = 5,groups = {"Smoke Test"})
+    public void HastaSilmeId() {
 
         MyFunc.Bekle(2);
-        aksiyonDriver.moveToElement(profilIconu).build().perform();
+        WebElement anasayfa=driver.findElement(By.xpath("//i[@class='icon-home small']"));
+        anasayfa.click();
 
         MyFunc.Bekle(3);
-        Assert.assertTrue(profilIconu.getText().contains("Account"),"My Account bulunamadı.");
+        WebElement loggedIn = driver.findElement(By.xpath("//h4[contains(text(),'Logged')]"));
+        Assert.assertTrue(loggedIn.getText().contains("Logged in"), "Login sayfası açılmadı.");
 
-        WebElement myAccount= driver.findElement(By.xpath("//a[@href='/openmrs/adminui/myaccount/myAccount.page']"));
-        myAccount.click();
+        MyFunc.Bekle(1);
+        WebElement findPatientRecord = driver.findElement(By.id("coreapps-activeVisitsHomepageLink-coreapps-activeVisitsHomepageLink-extension"));
+        findPatientRecord.click();
 
-        MyFunc.Bekle(4);
-        WebElement acilanSayfa= driver.findElement(By.xpath("//div[@id='tasks']"));
+        MyFunc.Bekle(1);
+        WebElement searchPatient = driver.findElement(By.xpath("//input[@class='form-control']"));
+        searchPatient.sendKeys("10005HJPS");
 
-        Assert.assertTrue(acilanSayfa.getText().contains("Change"),"Buton görünmedi");
-
-        MyFunc.Bekle(4);
-        Assert.assertTrue(acilanSayfa.getText().contains("Languages"),"Buton görünmedi");
+        MyFunc.Bekle(1);
+        WebElement noRecord = driver.findElement(By.xpath("//td[@class='dataTables_empty']"));
+        Assert.assertTrue(noRecord.getText().contains("No matching records found"), "Hasta listede var.");
 
     }
 
 
-    @Test (priority = 2, groups = {"Regression"})
+    @Test (priority = 6,groups = {"Smoke Test"})
+    public void HastaSilmeIsimle() {
+
+        MyFunc.Bekle(2);
+        WebElement anasayfa=driver.findElement(By.xpath("//i[@class='icon-home small']"));
+        anasayfa.click();
+
+        WebElement loggedIn = driver.findElement(By.xpath("//h4[contains(text(),'Logged')]"));
+        Assert.assertTrue(loggedIn.getText().contains("Logged in"), "Login sayfası açılmadı.");
+
+        MyFunc.Bekle(1);
+        WebElement findPatientRecord = driver.findElement(By.id("coreapps-activeVisitsHomepageLink-coreapps-activeVisitsHomepageLink-extension"));
+        findPatientRecord.click();
+
+        MyFunc.Bekle(1);
+        WebElement searchPatient = driver.findElement(By.xpath("//input[@class='form-control']"));
+        searchPatient.sendKeys("Ali Turk");
+
+        MyFunc.Bekle(1);
+        WebElement noRecord = driver.findElement(By.xpath("//td[@class='dataTables_empty']"));
+        Assert.assertTrue(noRecord.getText().contains("No matching records found"), "Hasta listede var.");//Aynı şekilde to lower case hata verdiği için kaldırdım
+
+    }
+
+    @Test(priority = 7,groups = {"Smoke Test"})
     public void HastaAramaP() throws AWTException {
+
+        MyFunc.Bekle(2);
+        WebElement anasayfa=driver.findElement(By.xpath("//i[@class='icon-home small']"));
+        anasayfa.click();
 
         By bosYereTiklat=By.xpath("//div[@class='collapse navbar-collapse']");
 
@@ -246,10 +326,10 @@ public class OpenMrsOrg {
 
         //isimden arama
         WebElement hastaAra= driver.findElement(By.xpath("//input[@class='form-control']"));
-        hastaAra.sendKeys("Cenk"); //hasta sonradan silinmiş olabilir
+        hastaAra.sendKeys("Ahmet"); //hasta sonradan silinmiş olabilir
         MyFunc.Bekle(3);
         WebElement acilanListe= driver.findElement(By.xpath("//table[@id='patient-search-results-table']"));
-        Assert.assertTrue(acilanListe.getText().contains("Cenk"),"Aranan hasta ismi bulunamadı");
+        Assert.assertTrue(acilanListe.getText().contains("Ahmet"),"Aranan hasta ismi bulunamadı");
 
         hastaAra.clear();
         WebElement bosyereTikla= driver.findElement(bosYereTiklat);
@@ -262,9 +342,9 @@ public class OpenMrsOrg {
             robot.keyRelease(KeyEvent.VK_TAB);
         }
 
-        hastaAra.sendKeys("Tosun");//hasta sonradan silinmiş olabilir
+        hastaAra.sendKeys("Keser");//hasta sonradan silinmiş olabilir
         MyFunc.Bekle(3);
-        Assert.assertTrue(acilanListe.getText().contains("Tosun"),"Aranan hasta soyismi bulunamadı");
+        Assert.assertTrue(acilanListe.getText().contains("Keser"),"Aranan hasta soyismi bulunamadı");
 
         hastaAra.clear();
         bosyereTikla.click();
@@ -275,9 +355,9 @@ public class OpenMrsOrg {
             robot.keyRelease(KeyEvent.VK_TAB);
         }
 
-        hastaAra.sendKeys("100LXD");//hasta sonradan silinmiş olabilir
+        hastaAra.sendKeys("100HYE");//hasta sonradan silinmiş olabilir
         MyFunc.Bekle(3);
-        Assert.assertTrue(acilanListe.getText().contains("100LXD"),"Aranan hasta ID bulunamadı");
+        Assert.assertTrue(acilanListe.getText().contains("100HYE"),"Aranan hasta ID bulunamadı");
 
         hastaAra.clear();
         bosyereTikla.click();
@@ -296,8 +376,12 @@ public class OpenMrsOrg {
         Assert.assertTrue(hastaBilgiListesi.getText().contains("DIAGNOSES"),"Hasta Bilgisi Görüntülenemedi.");
     }
 
-    @Test (priority = 3, groups = {"Regression"})
+    @Test(priority = 8,groups = {"Smoke Test"})
     public void HastaAramaN() throws AWTException {
+
+        MyFunc.Bekle(2);
+        WebElement anasayfa=driver.findElement(By.xpath("//i[@class='icon-home small']"));
+        anasayfa.click();
 
         By bosYereTiklat=By.xpath("//div[@class='collapse navbar-collapse']");
         Robot robot=new Robot();
@@ -344,113 +428,12 @@ public class OpenMrsOrg {
 
     }
 
-
-    @Test (priority = 4, groups = {"Smoke Test"})
-    public void HastaSilmeIsimle() {
-
-        MyFunc.Bekle(4);
-        WebElement anasayfa=driver.findElement(By.xpath("//i[@class='icon-home small']"));
-        anasayfa.click();
-
-        WebElement loggedIn = driver.findElement(By.xpath("//h4[contains(text(),'Logged')]"));
-        Assert.assertTrue(loggedIn.getText().contains("Logged in"), "Login sayfası açılmadı.");
-
-        MyFunc.Bekle(1);
-        WebElement findPatientRecord = driver.findElement(By.id("coreapps-activeVisitsHomepageLink-coreapps-activeVisitsHomepageLink-extension"));
-        findPatientRecord.click();
-
-        MyFunc.Bekle(1);
-        WebElement searchPatient = driver.findElement(By.xpath("//input[@class='form-control']"));
-        searchPatient.sendKeys("Ali Turk");
-
-        MyFunc.Bekle(1);
-        WebElement noRecord = driver.findElement(By.xpath("//td[@class='dataTables_empty']"));
-        Assert.assertTrue(noRecord.getText().contains("No matching records found"), "Hasta listede var.");//Aynı şekilde to lower case hata verdiği için kaldırdım
-
-    }
-
-
-    @Test (priority = 5, groups = {"Smoke Test"})
-    public void HastaSilmeId() {
-
-        MyFunc.Bekle(4);
-        WebElement anasayfa=driver.findElement(By.xpath("//i[@class='icon-home small']"));
-        anasayfa.click();
-
-        MyFunc.Bekle(3);
-        WebElement loggedIn = driver.findElement(By.xpath("//h4[contains(text(),'Logged')]"));
-        Assert.assertTrue(loggedIn.getText().contains("Logged in"), "Login sayfası açılmadı.");
-
-        MyFunc.Bekle(1);
-        WebElement findPatientRecord = driver.findElement(By.id("coreapps-activeVisitsHomepageLink-coreapps-activeVisitsHomepageLink-extension"));
-        findPatientRecord.click();
-
-        MyFunc.Bekle(1);
-        WebElement searchPatient = driver.findElement(By.xpath("//input[@class='form-control']"));
-        searchPatient.sendKeys("10005HJPS");
-
-        MyFunc.Bekle(1);
-        WebElement noRecord = driver.findElement(By.xpath("//td[@class='dataTables_empty']"));
-        Assert.assertTrue(noRecord.getText().contains("No matching records found"), "Hasta listede var.");
-
-    }
-
-
-    @Test (priority = 6, groups = {"Smoke Test"}, dataProvider = "hastaData")
-    public void HastaSilme(String isim,String yes) {
-
-        WebElement anasayfa=driver.findElement(By.xpath("//i[@class='icon-home small']"));
-        anasayfa.click();
-
-        WebElement loggedIn = driver.findElement(By.xpath("//h4[contains(text(),'Logged')]"));
-        Assert.assertTrue(loggedIn.getText().contains("Logged in"), "Login sayfası açılmadı.");
-
-        MyFunc.Bekle(1);
-        WebElement findPatientRecord = driver.findElement(By.id("coreapps-activeVisitsHomepageLink-coreapps-activeVisitsHomepageLink-extension"));
-        findPatientRecord.click();
-
-        MyFunc.Bekle(1);
-        WebElement searchPatient = driver.findElement(By.xpath("//input[@class='form-control']"));
-        searchPatient.sendKeys(isim);
-
-        MyFunc.Bekle(1);
-        WebElement patient = driver.findElement(By.xpath("//*[@id=\"patient-search-results-table\"]/tbody/tr[1]/td[1]"));
-        patient.click();
-
-        MyFunc.Bekle(1);
-        WebElement deleteBtn = driver.findElement(By.xpath("//ul[@class='float-left']/li[8]"));
-        deleteBtn.click();
-
-        MyFunc.Bekle(1);
-        WebElement delete = driver.findElement(By.id("delete-reason"));
-        delete.sendKeys(yes);
-
-        MyFunc.Bekle(1);
-        WebElement confirmBtn = driver.findElement(By.xpath("//div[@id='delete-patient-creation-dialog']//*[text()='Confirm']"));
-        confirmBtn.click();
-
-        MyFunc.Bekle(5);
-        WebElement searchPatient2 = driver.findElement(By.xpath("//input[@class='form-control']"));
-        searchPatient2.sendKeys(isim);
-
-        MyFunc.Bekle(1);
-        WebElement noRecord = driver.findElement(By.xpath("//td[@class='dataTables_empty']"));
-        Assert.assertTrue(noRecord.getText().contains("No matching records found"), "Hasta listede var.");
-
-        MyFunc.Bekle(5);
-        driver.quit();
-
-    }
-
-    @DataProvider
-    Object[][] hastaData(){
-        Object[][] data={{"Mehmet Turk","yes"}};
-        return data;
-    }
-
-
-    @Test (priority = 4, groups = {"Regression"})
+    @Test(priority = 9,groups = {"Smoke Test"})
     public void HastaListeleme() {
+
+        MyFunc.Bekle(2);
+        WebElement anasayfa=driver.findElement(By.xpath("//i[@class='icon-home small']"));
+        anasayfa.click();
 
         JavascriptExecutor js=(JavascriptExecutor)driver;
 
@@ -491,7 +474,42 @@ public class OpenMrsOrg {
 
     }
 
-    @Test (priority = 5, groups = {"Regression"})
+    @Test(priority = 10,groups = {"Smoke Test"})
+    public void MyAccount() {
+
+        WebElement profilIconu= driver.findElement(By.xpath("//li[@clas         s='nav-item identifier']"));
+        Actions aksiyonDriver=new Actions(driver);
+
+        MyFunc.Bekle(2);
+        aksiyonDriver.moveToElement(profilIconu).build().perform();
+
+        MyFunc.Bekle(3);
+        Assert.assertTrue(profilIconu.getText().contains("Account"),"My Account bulunamadı.");
+
+        WebElement myAccount= driver.findElement(By.xpath("//a[@href='/openmrs/adminui/myaccount/myAccount.page']"));
+        myAccount.click();
+
+        MyFunc.Bekle(4);
+        WebElement acilanSayfa= driver.findElement(By.xpath("//div[@id='tasks']"));
+
+        Assert.assertTrue(acilanSayfa.getText().contains("Change"),"Buton görünmedi");
+
+        MyFunc.Bekle(4);
+        Assert.assertTrue(acilanSayfa.getText().contains("Languages"),"Buton görünmedi");
+
+    }
+
+    @Test(priority = 11, groups = {"Smoke Test"})
+    public void Logout() {
+
+        WebElement logOutButton = driver.findElement(By.linkText("Logout"));
+        logOutButton.click();
+        MyFunc.Bekle(2);
+
+    }
+
+
+    @Test(priority = 1, groups = {"Regression"})
     public void HastaKayitlariniBirlestirmeP() {
 
         JavascriptExecutor js=(JavascriptExecutor) driver;
@@ -524,9 +542,9 @@ public class OpenMrsOrg {
         mergePatient.click();
 
         WebElement id1=driver.findElement(By.xpath("//*[@id=\"patient1-text\"]"));
-        id1.sendKeys("100HRU" + Keys.TAB);
+        id1.sendKeys("100HXG" + Keys.TAB);
         WebElement id2=driver.findElement(By.xpath("//*[@id=\"patient2-text\"]"));
-        id2.sendKeys("100J27" + Keys.ENTER);
+        id2.sendKeys("100HYE" + Keys.ENTER);
 
         WebElement continueButton=driver.findElement(By.xpath("//*[@id=\"confirm-button\"]"));
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id=\"confirm-button\"]")));
@@ -554,8 +572,10 @@ public class OpenMrsOrg {
 
     }
 
-    @Test (priority = 6, groups = {"Regression"})
+    @Test(priority = 2, groups = {"Regression"})
     public void HastaKayitlariniBirlestirmeN() {
+
+        driver.get("https://openmrs.org/");
 
         JavascriptExecutor js=(JavascriptExecutor) driver;
         WebElement demo=driver.findElement(By.xpath("//a[@class='zak-button']"));
@@ -569,16 +589,16 @@ public class OpenMrsOrg {
         WebElement openMRS2Demo=driver.findElement(By.xpath("//span[@class='elementor-button-text' and text()='Enter the OpenMRS 2 Demo']"));
         openMRS2Demo.click();
 
-        WebElement username=driver.findElement(By.id("username"));
-        username.sendKeys("admin" + Keys.TAB);
-        WebElement password=driver.findElement(By.id("password"));
-        password.sendKeys("Admin123");
+//        WebElement username=driver.findElement(By.id("username"));
+//        username.sendKeys("admin" + Keys.TAB);
+//        WebElement password=driver.findElement(By.id("password"));
+//        password.sendKeys("Admin123");
 
-        WebElement registrationDesk=driver.findElement(By.xpath("//li[text()='Registration Desk']"));
-        registrationDesk.click();
-
-        WebElement loginButton=driver.findElement(By.id("loginButton"));
-        loginButton.click();
+//        WebElement registrationDesk=driver.findElement(By.xpath("//li[text()='Registration Desk']"));
+//        registrationDesk.click();
+//
+//        WebElement loginButton=driver.findElement(By.id("loginButton"));
+//        loginButton.click();
 
         WebElement dataManagement=driver.findElement(By.xpath("//*[@id=\"coreapps-datamanagement-homepageLink-coreapps-datamanagement-homepageLink-extension\"]"));
         dataManagement.click();
@@ -597,15 +617,17 @@ public class OpenMrsOrg {
     }
 
 
-    @Test (priority = 7, groups = {"Regression"})
-    public void RandevuYanlisSaatDilimi() {
+    @Test(priority = 3, groups = {"Regression"})
+    public void RandevuYanlisSaatDilimi(String isim, String sifre, String kod) {
 
-        MyFunc.Bekle(3);
+        driver.get("https://openmrs.org/");
+
         WebElement demo=wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Demo")));
         demo.click();
 
         WebElement explore=driver.findElement(By.xpath("(//div[@class='elementor-button-wrapper']/a)[2]"));
         explore.click();
+
 
         MyFunc.Bekle(2);
         WebElement enterMRS=wait.until(ExpectedConditions.
@@ -613,11 +635,13 @@ public class OpenMrsOrg {
         enterMRS.click();
         MyFunc.Bekle(2);
 
+
         WebElement id=driver.findElement(By.id("username"));
-        id.sendKeys("admin");
+        id.sendKeys(isim);
+
 
         WebElement pw=driver.findElement(By.id("password"));
-        pw.sendKeys("Admin123");
+        pw.sendKeys(sifre);
 
         WebElement location=driver.findElement(By.id("Registration Desk"));
         location.click();
@@ -632,16 +656,27 @@ public class OpenMrsOrg {
         manage.click();
 
         WebElement hastaid=driver.findElement(By.xpath("//input[@id='patient-search']"));
-        hastaid.sendKeys("100JGA");
+        hastaid.sendKeys(kod);
 
         WebElement tbody=wait.until(ExpectedConditions.
                 elementToBeClickable(By.xpath("//tbody[@role='alert']/tr")));
         tbody.click();
 
-        WebElement hataText=driver.findElement(By.xpath("//div[@id='time-zone-warning']//p"));
+
+
+
+        WebElement hataText=wait.until(ExpectedConditions.
+                visibilityOfElementLocated(By.xpath("//div[@id='time-zone-warning']//p")));
 
         Assert.assertTrue(hataText.isDisplayed());
 
+
+    }
+    @DataProvider
+    Object[][] getData()
+    {
+        Object[][] data={{"admin","Admin123","100JGA"}};
+        return data;
     }
 
 }
